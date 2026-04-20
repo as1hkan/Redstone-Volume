@@ -1,0 +1,86 @@
+:root {
+  --bg: #0d0909;
+  --panel: #1a0d0d;
+  --red: #ff1a1a;
+  --text: #ff4a4a;
+}
+
+body {
+  margin: 0;
+  font-family: 'Minecraft', monospace;
+  width: 280px;
+  background: var(--bg);
+}
+
+.popup {
+  padding: 8px;
+}
+
+.panel {
+  background: var(--panel);
+  border-radius: 16px;
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.head {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.logo {
+  width: 36px;
+  height: 36px;
+  image-rendering: pixelated;
+}
+
+.title {
+  font-size: 18px;
+  font-weight: bold;
+  color: var(--red);
+}
+
+.slider-area {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.volume-text {
+  margin-top: 6px;
+  font-size: 16px;
+  font-weight: bold;
+  color: var(--red);
+}
+
+#volume-slider {
+  width: 90%;
+  height: 14px;
+  -webkit-appearance: none;
+  background: rgba(255,0,0,0.3);
+  border-radius: 7px;
+  margin-top: 6px;
+}
+
+#volume-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: var(--red);
+  cursor: pointer;
+  box-shadow: 0 2px 6px rgba(255,0,0,0.5);
+}
+
+#volume-slider::-moz-range-thumb {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: var(--red);
+  cursor: pointer;
+}

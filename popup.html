@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="fa">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Redstone Volume Fixed Icon</title>
+<link rel="stylesheet" href="popup.css">
+<style>
+@font-face {
+    font-family: 'Minecraft';
+    src: url('Minecraft.ttf') format('truetype');
+}
+</style>
+</head>
+<body>
+<main class="popup">
+  <section class="panel">
+    <header class="head">
+      <img id="volume-icon" class="logo" src="icons/icon48.png" alt="Redstone">
+      <div class="title">Redstone Volume</div>
+    </header>
+    <div class="slider-area">
+      <input id="volume-slider" type="range" min="0" max="200" step="1" value="100">
+      <div id="volume-text" class="volume-text">100%</div>
+    </div>
+  </section>
+</main>
+<script src="popup.js"></script>
+</body>
+</html>
