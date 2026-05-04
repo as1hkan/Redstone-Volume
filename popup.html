@@ -3,21 +3,276 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Redstone Volume Fixed Icon</title>
+<title>Redstone Volume</title>
 <link rel="stylesheet" href="popup.css">
 </head>
 <body>
+<div class="scanlines"></div>
 <main class="popup">
-  <section class="panel">
-    <header class="head">
-      <img id="volume-icon" class="logo" src="icons/volumeUp.png" alt="Volume icon">
-      <div class="title">Redstone Volume</div>
-    </header>
-    <div class="slider-area">
+
+  <!-- Header -->
+  <header class="header">
+    <div class="header-left">
+      <img id="volume-icon" class="vol-icon" src="volumeUp.png" alt="volume">
+      <div class="title-block">
+        <span class="title">REDSTONE</span>
+        <span class="subtitle">VOLUME CONTROL v2</span>
+      </div>
+    </div>
+    <div class="header-right">
+      <div class="signal-dots">
+        <span class="dot" id="dot1"></span>
+        <span class="dot" id="dot2"></span>
+        <span class="dot" id="dot3"></span>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Volume -->
+  <section class="vol-section">
+    <div class="vol-display">
+      <span id="volume-number" class="vol-number">100</span>
+      <span class="vol-unit">%</span>
+    </div>
+    <div class="slider-wrap">
       <input id="volume-slider" type="range" min="0" max="200" step="1" value="100">
-      <div id="volume-text" class="volume-text">100%</div>
+    </div>
+    <div class="vol-labels">
+      <span>0</span><span>50</span><span>100</span><span>150</span><span>200</span>
     </div>
   </section>
+
+  <!-- Quick Buttons -->
+  <section class="quick-btns">
+    <button class="qbtn" data-vol="0" title="Mute">0%</button>
+    <button class="qbtn" data-vol="50">50%</button>
+    <button class="qbtn active" data-vol="100">100%</button>
+    <button class="qbtn" data-vol="150">150%</button>
+    <button class="qbtn" data-vol="200">200%</button>
+    <button class="qbtn reset-btn" id="reset-btn" title="Reset to 100%">↺</button>
+  </section>
+
+  <!-- Audio Visualizer -->
+  <section class="visualizer-section">
+    <div class="section-label">
+      VISUALIZER
+      <span class="toggle-switch-wrap">
+        <label class="toggle-switch">
+          <input type="checkbox" id="visualizer-toggle" checked>
+          <span class="toggle-slider"></span>
+        </label>
+      </span>
+    </div>
+    <canvas id="visualizer-canvas" width="272" height="48"></canvas>
+  </section>
+
+  <!-- Volume Fade -->
+  <section class="collapsible-section open">
+    <div class="section-label collapsible-header" data-target="fade-body">
+      <span>FADE</span>
+      <span class="section-right">
+        <span class="collapse-arrow">▾</span>
+      </span>
+    </div>
+    <div class="collapsible-body" id="fade-body">
+      <div class="fade-controls">
+        <div class="fade-row">
+          <span class="fade-label">DURATION</span>
+          <input type="range" id="fade-duration" min="500" max="10000" step="500" value="2000" class="mini-slider">
+          <span id="fade-duration-val" class="mini-val">2s</span>
+        </div>
+        <div class="fade-btns">
+          <button class="fade-btn" id="fade-in-btn">FADE IN</button>
+          <button class="fade-btn" id="fade-out-btn">FADE OUT</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Sleep Timer -->
+  <section class="collapsible-section open">
+    <div class="section-label collapsible-header" data-target="sleep-body">
+      <span>SLEEP TIMER <span id="sleep-status" class="badge-off"></span></span>
+      <span class="section-right">
+        <span class="collapse-arrow">▾</span>
+      </span>
+    </div>
+    <div class="collapsible-body" id="sleep-body">
+      <div class="sleep-controls">
+        <div class="fade-row">
+          <span class="fade-label">AFTER</span>
+          <input type="range" id="sleep-minutes" min="1" max="120" step="1" value="30" class="mini-slider">
+          <span id="sleep-minutes-val" class="mini-val">30m</span>
+        </div>
+        <div class="fade-btns">
+          <button class="fade-btn" id="sleep-set-btn">SET TIMER</button>
+          <button class="fade-btn fade-btn-cancel" id="sleep-clear-btn" disabled>CANCEL</button>
+        </div>
+        <div id="sleep-countdown" class="sleep-countdown"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- EQ Presets -->
+  <section class="collapsible-section open">
+    <div class="section-label collapsible-header" data-target="eq-body">
+      <span>EQ PRESETS</span>
+      <span class="section-right">
+        <span class="collapse-arrow">▾</span>
+      </span>
+    </div>
+    <div class="collapsible-body" id="eq-body">
+      <div class="presets">
+        <button class="preset-btn active" data-preset="flat">FLAT</button>
+        <button class="preset-btn" data-preset="bass">BASS+</button>
+        <button class="preset-btn" data-preset="voice">VOICE</button>
+        <button class="preset-btn" data-preset="night">NIGHT</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- 10-Band EQ -->
+  <section class="collapsible-section">
+    <div class="section-label collapsible-header" data-target="eq10-body">
+      <span>10-BAND EQ</span>
+      <span class="section-right">
+        <span class="toggle-switch-wrap">
+          <label class="toggle-switch">
+            <input type="checkbox" id="eq10-toggle">
+            <span class="toggle-slider"></span>
+          </label>
+        </span>
+        <span class="collapse-arrow">▾</span>
+      </span>
+    </div>
+    <div class="collapsible-body collapsed" id="eq10-body">
+      <div class="eq10-presets">
+        <button class="eq10-preset-btn active" data-eq10="flat">FLAT</button>
+        <button class="eq10-preset-btn" data-eq10="rock">ROCK</button>
+        <button class="eq10-preset-btn" data-eq10="pop">POP</button>
+        <button class="eq10-preset-btn" data-eq10="classical">CLASS</button>
+        <button class="eq10-preset-btn" data-eq10="electronic">ELEC</button>
+        <button class="eq10-preset-btn" data-eq10="custom">CUST</button>
+      </div>
+      <div class="eq10-bands" id="eq10-bands">
+        <!-- Generated by JS -->
+      </div>
+      <button class="eq10-reset-btn" id="eq10-reset">RESET EQ</button>
+    </div>
+  </section>
+
+  <!-- Noise Gate -->
+  <section class="collapsible-section">
+    <div class="section-label collapsible-header" data-target="noisegate-body">
+      <span>NOISE GATE</span>
+      <span class="section-right">
+        <span class="toggle-switch-wrap">
+          <label class="toggle-switch">
+            <input type="checkbox" id="noisegate-toggle">
+            <span class="toggle-slider"></span>
+          </label>
+        </span>
+        <span class="collapse-arrow">▾</span>
+      </span>
+    </div>
+    <div class="collapsible-body collapsed" id="noisegate-body">
+      <div class="fade-row">
+        <span class="fade-label">THRESHOLD</span>
+        <input type="range" id="noisegate-threshold" min="-80" max="-20" step="1" value="-50" class="mini-slider">
+        <span id="noisegate-threshold-val" class="mini-val">-50dB</span>
+      </div>
+      <div class="hint" style="margin-top:4px">Auto-mutes when audio drops below threshold</div>
+    </div>
+  </section>
+
+  <!-- Auto-Duck -->
+  <section class="collapsible-section">
+    <div class="section-label collapsible-header" data-target="autoduck-body">
+      <span>AUTO-DUCK</span>
+      <span class="section-right">
+        <span class="toggle-switch-wrap">
+          <label class="toggle-switch">
+            <input type="checkbox" id="autoduck-toggle">
+            <span class="toggle-slider"></span>
+          </label>
+        </span>
+        <span class="collapse-arrow">▾</span>
+      </span>
+    </div>
+    <div class="collapsible-body collapsed" id="autoduck-body">
+      <div class="autoduck-controls">
+        <div class="fade-row">
+          <span class="fade-label">REDUCE TO</span>
+          <input type="range" id="autoduck-amount" min="0" max="80" step="5" value="30" class="mini-slider">
+          <span id="autoduck-amount-val" class="mini-val">30%</span>
+        </div>
+        <div class="fade-label" style="margin-top:6px;margin-bottom:3px">DUCK SOURCE TAB</div>
+        <select id="autoduck-source-select" class="duck-select">
+          <option value="">— Select tab —</option>
+        </select>
+        <div class="hint" style="margin-top:4px">Other tabs duck when this tab has audio</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Per-Site Memory -->
+  <section class="collapsible-section">
+    <div class="section-label collapsible-header" data-target="sitemem-body">
+      <span>PER-SITE MEMORY</span>
+      <span class="section-right">
+        <span class="toggle-switch-wrap">
+          <label class="toggle-switch">
+            <input type="checkbox" id="sitemem-toggle" checked>
+            <span class="toggle-slider"></span>
+          </label>
+        </span>
+        <span class="collapse-arrow">▾</span>
+      </span>
+    </div>
+    <div class="collapsible-body collapsed" id="sitemem-body">
+      <div class="hint">Remembers volume per domain automatically</div>
+      <button class="fade-btn fade-btn-cancel" id="sitemem-clear-btn" style="margin-top:6px;width:100%">CLEAR ALL SITE DATA</button>
+    </div>
+  </section>
+
+  <!-- Tab Sync -->
+  <section class="collapsible-section">
+    <div class="section-label collapsible-header" data-target="tabsync-body">
+      <span>TAB SYNC</span>
+      <span class="section-right">
+        <span class="collapse-arrow">▾</span>
+      </span>
+    </div>
+    <div class="collapsible-body collapsed" id="tabsync-body">
+      <div class="fade-label" style="margin-bottom:4px">SYNC THIS TAB WITH</div>
+      <div id="tabsync-list" class="tabsync-list"></div>
+      <div id="tabsync-status" class="hint" style="margin-top:4px"></div>
+      <div class="fade-btns" style="margin-top:6px">
+        <button class="fade-btn" id="tabsync-create-btn">CREATE GROUP</button>
+        <button class="fade-btn fade-btn-cancel" id="tabsync-leave-btn" disabled>LEAVE GROUP</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Active Tabs -->
+  <section class="tabs-section">
+    <div class="section-label">ACTIVE TABS <span id="active-count" class="badge">0</span></div>
+    <div id="active-tabs-list" class="tabs-list">
+      <div class="no-tabs">No tabs with modified volume</div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <!-- <span class="hint">↑↓ keys ±5% • Shift ×10 • M mute • Ctrl+Shift+↑↓ global</span> -->
+    <a class="link github" target="_blank" href="https://github.com/as1hkan/Redstone-Volume">Github repository</a>
+    <span class="link-container">
+      <a class="link" target="_blank" href="https://github.com/MamadjavadAlizade">User</a>
+      •
+      <a class="link" target="_blank" href="https://github.com/as1hkan">As1hkan</a>
+    </span>
+  </footer>
+
 </main>
 <script src="popup.js"></script>
 </body>

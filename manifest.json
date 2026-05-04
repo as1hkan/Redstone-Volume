@@ -1,13 +1,14 @@
 {
   "manifest_version": 3,
-  "name": "Redstone Volume Fixed Icon",
-  "version": "10.0.0",
-  "description": "Redstone-themed per-tab volume control with fixed Redstone icon.",
+  "name": "Redstone Volume",
+  "version": "2.0.0",
+  "description": "Per-tab volume control with boost up to 200%, EQ, sleep timer, fade, noise gate, and more.",
   "permissions": [
     "tabs",
     "storage",
     "tabCapture",
-    "offscreen"
+    "offscreen",
+    "alarms"
   ],
   "host_permissions": [
     "<all_urls>"
@@ -16,19 +17,39 @@
     "default_title": "Redstone Volume",
     "default_popup": "popup.html",
     "default_icon": {
-      "16": "icons/icon16.png",
-      "32": "icons/icon32.png",
-      "48": "icons/icon48.png",
-      "128": "icons/icon128.png"
+      "16": "icons/icon_16.png",
+      "32": "icons/icon_32.png",
+      "48": "icons/icon_48.png",
+      "128": "icons/icon_128.png"
     }
   },
   "background": {
     "service_worker": "background.js"
   },
   "icons": {
-    "16": "icons/icon16.png",
-    "32": "icons/icon32.png",
-    "48": "icons/icon48.png",
-    "128": "icons/icon128.png"
+    "16": "icons/icon_16.png",
+    "32": "icons/icon_32.png",
+    "48": "icons/icon_48.png",
+    "128": "icons/icon_128.png"
+  },
+  "commands": {
+    "volume-up": {
+      "suggested_key": {
+        "default": "Ctrl+Shift+Up"
+      },
+      "description": "Volume +10%"
+    },
+    "volume-down": {
+      "suggested_key": {
+        "default": "Ctrl+Shift+Down"
+      },
+      "description": "Volume -10%"
+    },
+    "volume-mute": {
+      "suggested_key": {
+        "default": "Ctrl+Shift+M"
+      },
+      "description": "Toggle Mute"
+    }
   }
 }
